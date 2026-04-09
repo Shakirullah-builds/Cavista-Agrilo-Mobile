@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+<string>Agrilo needs camera access to scan plants for diseases and pests.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Agrilo needs microphone access to record videos.</string>
 </dict>
 </plist>
