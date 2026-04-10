@@ -9,6 +9,7 @@ import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/constants/typography.dart';
 import 'package:impulse_mobile/features/home/homepage_provider.dart';
 import 'package:impulse_mobile/main.dart';
+import 'package:impulse_mobile/shared/custom/analyzing_wave.dart';
 import 'package:impulse_mobile/shared/custom/bottom_navbar.dart';
 import 'package:impulse_mobile/shared/custom_text.dart';
 
@@ -61,7 +62,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
   }
 
   Future<void> _captureAndAnalyze() async {
-    if (_isCameraInitialized || _isAnalyzing) return;
+    if (!_isCameraInitialized || _isAnalyzing) return;
 
     // Update UI to show thinking
     setState(() {
@@ -83,6 +84,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
       ref.read(scanResultProvider.notifier).state = fakeAiResults;
 
       if (mounted) {
+        ref.read(bottomNavBarIndexProvider.notifier).state = 2;
         context.go('/recommendation');
         debugPrint('Scan complete! Saved to Riverpod. Ready to navigate.');
       }
@@ -115,12 +117,12 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
           // 1. Camera Preview (Base layer)
           if (_isCameraInitialized)
             ClipRRect(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(5.r),
               child: CameraPreview(_controller),
             )
           else
             const Center(
-              child: CupertinoActivityIndicator(color: AppColors.lightGreen),
+              child: CupertinoActivityIndicator(color: AppColors.lightGreen, radius: 15,)
             ),
 
           // 2. Top Overlay (Optional info)
@@ -133,7 +135,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
 
           // 3. Bottom Overlay (Capture button)
           Positioned(
-            bottom: 50.h, // Above bottom nav
+            bottom: 40.h, // Above bottom nav
             left: 0,
             right: 0,
             child: _buildCaptureButton(),
@@ -155,7 +157,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppColors.background.withValues(alpha: 0.7),
+        color: AppColors.background.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: CustomText(
@@ -172,21 +174,20 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
       child: GestureDetector(
         onTap: _isAnalyzing ? null : _captureAndAnalyze,
         child: Container(
-          padding: EdgeInsets.all(30.r),
+          padding: EdgeInsets.all(47.r),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.textWhite, width: 4.w),
+            border: Border.all(color: AppColors.background.withValues(alpha: 0.75), width: 5.w),
             color: _isAnalyzing
-                ? AppColors.textGrey.withValues(alpha: 0.5)
-                : AppColors.neonYellow,
+                ? AppColors.textGrey.withValues(alpha: 0.7)
+                : AppColors.textWhite,
           ),
-          child: _isAnalyzing
-              ? const CupertinoActivityIndicator(color: AppColors.lightGreen, radius: 15,)
-              : Icon(
-                  Icons.camera_alt,
-                  color: AppColors.background,
-                  size: 36.spMin,
-                ),
+         child: _isAnalyzing
+            ? const AnalyzingWave(
+                color: AppColors.neonYellow,
+                size: 40,
+              )
+              : Container(),
         ),
       ),
     );
