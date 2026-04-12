@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:impulse_mobile/core/router.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
+import 'package:impulse_mobile/core/services/ai_service.dart';
 import 'package:impulse_mobile/core/theme/app_theme.dart';
 
 // Global variable to hold the cameras
@@ -18,6 +19,10 @@ Future<void> main() async {
 
   // Fetch the available cameras
   cameras = await availableCameras();
+
+  // Load the AI brain
+
+  await AiService.loadModel();
 
   // 2. Lock the app to Portrait mode (Saves UI work)
   await SystemChrome.setPreferredOrientations([

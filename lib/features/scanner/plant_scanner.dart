@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/constants/typography.dart';
+import 'package:impulse_mobile/core/services/ai_service.dart';
 import 'package:impulse_mobile/features/home/homepage_provider.dart';
 import 'package:impulse_mobile/main.dart';
 import 'package:impulse_mobile/shared/custom/analyzing_wave.dart';
@@ -77,16 +78,15 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
       // final result = await MyAiService.analyzeImage(imageFile.path);
 
       // This causes Delay
-      await Future.delayed(Duration(seconds: 2));
-      final fakeAiResults = 'Powdery Mildew detected';
-
+      //await Future.delayed(Duration(seconds: 2));
+      final aiResult = await AiService.analyzeImage(imageFile.path);
       // Saving the result to Riverpod
-      ref.read(scanResultProvider.notifier).state = fakeAiResults;
+      ref.read(scanResultProvider.notifier).state = aiResult;
 
       if (mounted) {
         ref.read(bottomNavBarIndexProvider.notifier).state = 2;
         context.go('/scanresult');
-        debugPrint('Scan complete! Saved to Riverpod. Ready to navigate.');
+        debugPrint('Scan complete! AI Says $aiResult');
       }
     } catch (e) {
       debugPrint('Error taking pictures: $e');
@@ -122,7 +122,10 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
             )
           else
             const Center(
-              child: CupertinoActivityIndicator(color: AppColors.lightGreen, radius: 15,)
+              child: CupertinoActivityIndicator(
+                color: AppColors.lightGreen,
+                radius: 15,
+              ),
             ),
 
           // 2. Top Overlay (Optional info)
@@ -177,16 +180,16 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
           padding: EdgeInsets.all(47.r),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.background.withValues(alpha: 0.75), width: 5.w),
+            border: Border.all(
+              color: AppColors.background.withValues(alpha: 0.75),
+              width: 5.w,
+            ),
             color: _isAnalyzing
                 ? AppColors.textGrey.withValues(alpha: 0.7)
                 : AppColors.textWhite,
           ),
-         child: _isAnalyzing
-            ? const AnalyzingWave(
-                color: AppColors.neonYellow,
-                size: 40,
-              )
+          child: _isAnalyzing
+              ? const AnalyzingWave(color: AppColors.neonYellow, size: 40)
               : Container(),
         ),
       ),

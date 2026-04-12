@@ -18,11 +18,6 @@ class AppTheme {
       foregroundColor: AppColors.textWhite,
       centerTitle: true,
       elevation: 0,
-      // titleTextStyle: TextStyle(
-      //   fontSize: 20.spMin,
-      //   fontWeight: AppTextStyles.fontWeightBold,
-      //   color: AppColors.textWhite,
-      // ),
       iconTheme: IconThemeData(color: AppColors.textWhite, size: 24.spMin),
     ),
     // Add input decoration theme here so all textfields look the same

@@ -4,7 +4,6 @@ import 'package:impulse_mobile/core/constants/colors.dart';
 
 class AppTextStyles {
   AppTextStyles._();
-  //static final AppTextStyles instance = AppTextStyles._();
 
   static const double headline = 36.0;
   static const double headlineMedium = 30.0;
