@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/features/home/homepage.dart';
-import 'package:impulse_mobile/features/recommendation/rec.dart';
+import 'package:impulse_mobile/features/result/scan_result.dart';
 import 'package:impulse_mobile/features/scanner/plant_scanner.dart';
 
 final router = GoRouter(
@@ -14,8 +14,8 @@ final router = GoRouter(
     }),
     GoRoute(path: '/scanner', builder: (context, state) => const PlantScannerScreen()),
     GoRoute(
-      path: '/recommendation',
-      builder: (context, state) => const RecommendationScreen(),
+      path: '/scanresult',
+      builder: (context, state) => const ScanResult(),
     ),
   ],
 );

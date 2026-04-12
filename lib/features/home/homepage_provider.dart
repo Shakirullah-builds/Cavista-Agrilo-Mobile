@@ -43,7 +43,7 @@ final navigateToProvider = StateProvider<void Function(BuildContext)>((ref) {
       context.go('/scanner');
       break;
       case 2:
-      context.go('/recommendation');
+      context.go('/scanresult');
       break;
     }
   };

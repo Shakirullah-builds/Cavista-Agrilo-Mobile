@@ -1,11 +1,12 @@
 class AssetPath {
   const AssetPath._();
 
-  // ------ SVGs ------
+  // ========= SVGs ===========
   static const String homeIcon = 'assets/icons/house.svg';
   static const String scanIcon = 'assets/icons/scan-line.svg';
-  static const String recommendationIcon =
+  static const String scanResultIcon =
       'assets/icons/chart-no-axes-combined.svg';
+      static const String recActionIcon = 'assets/icons/brain.svg';
   static const String bellIcon = 'assets/icons/bell.svg';
   static const String flaskIcon = 'assets/icons/flask-conical.svg';
   static const String activityIcon = 'assets/icons/activity.svg';
@@ -15,4 +16,7 @@ class AssetPath {
   static const String apertureIcon = 'assets/icons/aperture.svg';
   static const String pieChartIcon = 'assets/icons/chart-spline.svg';
   static const String heartPulseIcon = 'assets/icons/heart-pulse.svg';
+
+  // ========== Images ==========
+  static const String powderyMildewImg = 'assets/images/powdery mildew.jpg';
 }

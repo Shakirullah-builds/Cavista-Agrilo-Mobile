@@ -14,6 +14,8 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final bool? softWrap;
   final TextStyle? style;
+  final double? letterSpacing;
+  final double? wordSpacing;
 
   const CustomText(
     this.text, {
@@ -27,6 +29,8 @@ class CustomText extends StatelessWidget {
     this.fontSize,
     this.fontWeight,
     this.softWrap,
+    this.letterSpacing,
+    this.wordSpacing,
   });
 
   @override
@@ -38,6 +42,9 @@ class CustomText extends StatelessWidget {
       fontSize: fontSize?.spMin,
       fontWeight: fontWeight,
       decoration: decoration,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      
     );
     return Text(
       text,

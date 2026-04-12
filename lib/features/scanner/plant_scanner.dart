@@ -85,7 +85,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
 
       if (mounted) {
         ref.read(bottomNavBarIndexProvider.notifier).state = 2;
-        context.go('/recommendation');
+        context.go('/scanresult');
         debugPrint('Scan complete! Saved to Riverpod. Ready to navigate.');
       }
     } catch (e) {

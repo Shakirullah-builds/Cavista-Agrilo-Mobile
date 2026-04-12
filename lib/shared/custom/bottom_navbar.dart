@@ -54,7 +54,7 @@ class CustomBottomNavBar extends StatelessWidget {
           _buildNavItem(
             index: 2,
             iconWidget: AppAssets(
-              assetPath: AssetPath.recommendationIcon,
+              assetPath: AssetPath.scanResultIcon,
               color: currentIndex == 2 ? AppColors.background : AppColors.textGrey
             ),
             isSelected: currentIndex == 2,
