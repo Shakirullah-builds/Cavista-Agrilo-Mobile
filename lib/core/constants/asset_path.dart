@@ -19,6 +19,7 @@ class AssetPath {
 
   // ========== Images ==========
   static const String powderyMildewImg = 'assets/images/powdery mildew.jpg';
+  static const String emptyStateScannerImg = 'assets/images/scanner.png';
   static const String tfliteModel = 'assets/ml/model_unquant.tflite';
   static const String modelLabel = 'assets/ml/labels.txt';
 }

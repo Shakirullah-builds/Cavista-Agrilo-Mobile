@@ -1,2 +1,4 @@
-0 Pen
-1 Phone
+0 Tomato___Early_blight
+1 Tomato___Late_blight
+2 Tomato___healthy
+3 Other

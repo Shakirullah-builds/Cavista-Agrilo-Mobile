@@ -1,3 +1,6 @@
 windows/** linguist-generated=true
 macos/** linguist-generated=true
 linux/** linguist-generated=true
+
+# Secret environment Variable
+.env

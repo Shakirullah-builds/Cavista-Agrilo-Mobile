@@ -14,10 +14,10 @@ import 'package:impulse_mobile/shared/custom/analyzing_wave.dart';
 import 'package:impulse_mobile/shared/custom/bottom_navbar.dart';
 import 'package:impulse_mobile/shared/custom_text.dart';
 
-// This provider holds the name of the disease (or "Healthy") after the scan.
+// This provider holds the AI analysis result (map with label and confidence) after the scan.
 // It starts as null because nothing is yet to be scanned by default.
 
-final scanResultProvider = StateProvider<String?>((ref) => null);
+final scanResultProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 
 class PlantScannerScreen extends ConsumerStatefulWidget {
   const PlantScannerScreen({super.key});
@@ -83,10 +83,21 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
       // Saving the result to Riverpod
       ref.read(scanResultProvider.notifier).state = aiResult;
 
-      if (mounted) {
+      if (aiResult != null && mounted) {
         ref.read(bottomNavBarIndexProvider.notifier).state = 2;
-        context.go('/scanresult');
-        debugPrint('Scan complete! AI Says $aiResult');
+
+        context.push(
+          '/scanresult',
+          extra: {
+            'aiLabel': aiResult['label'], // Extracts the string
+            'confidence': aiResult['confidence'], // Extracts the double
+            'imagePath': imageFile.path,
+          },
+        );
+
+        debugPrint('Scan complete! AI Says ${aiResult['label']}');
+      } else {
+        debugPrint("AI returned null.");
       }
     } catch (e) {
       debugPrint('Error taking pictures: $e');

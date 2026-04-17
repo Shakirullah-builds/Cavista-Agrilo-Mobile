@@ -15,7 +15,19 @@ final router = GoRouter(
     GoRoute(path: '/scanner', builder: (context, state) => const PlantScannerScreen()),
     GoRoute(
       path: '/scanresult',
-      builder: (context, state) => const ScanResult(),
+      builder: (context, state) {
+
+        // Extra data from the scan result screen
+        final extra = state.extra as Map<String, dynamic>?;
+
+        // Unpack it into typed variables
+        final String label = extra?['aiLabel'] as String? ?? 'No Scan Data';
+        final double confidence = extra?["confidence"] as double? ?? 0.0;
+        final String imagePath = extra?["imagePath"] as String? ?? '';
+
+        // Feed to the screen!
+        return ScanResult(aiLabel: label, confidence: confidence, imagePath: imagePath);
+      }
     ),
   ],
 );

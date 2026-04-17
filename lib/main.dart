@@ -3,11 +3,13 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:impulse_mobile/core/router.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/services/ai_service.dart';
+import 'package:impulse_mobile/core/services/supabase_service.dart';
 import 'package:impulse_mobile/core/theme/app_theme.dart';
 
 // Global variable to hold the cameras
@@ -16,6 +18,12 @@ late List<CameraDescription> cameras;
 Future<void> main() async {
   // 1. Ensure bindings are initialized before calling native code
   WidgetsFlutterBinding.ensureInitialized();
+
+    // Load the hidden keys
+  await dotenv.load(fileName: ".env");
+
+  // Initialize the database
+  await SupabaseService.initSupabase();
 
   // Fetch the available cameras
   cameras = await availableCameras();
@@ -39,16 +47,13 @@ Future<void> main() async {
   );
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => ScreenUtilInit(
-        // The design size from the Figma file
-        designSize: const Size(390, 884),
-        splitScreenMode: true,
-        builder: (context, child) {
-          return const ProviderScope(child: ImpulseCavista());
-        },
-      ),
+    ScreenUtilInit(
+      // The design size from the Figma file
+      designSize: const Size(390, 884),
+      splitScreenMode: true,
+      builder: (context, child) {
+        return const ProviderScope(child: ImpulseCavista());
+      },
     ),
   );
 }
@@ -61,8 +66,8 @@ class ImpulseCavista extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Impulse Cavista (Agrilo)',
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
+      //locale: DevicePreview.locale(context),
+      //builder: DevicePreview.appBuilder,
       // Theme Setup
       theme: AppTheme.darkTheme,
       // theme: ThemeData(

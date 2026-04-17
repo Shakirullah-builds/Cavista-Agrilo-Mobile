@@ -9,4 +9,5 @@ class AppColors {
   static const Color textGrey = Color(0xFFA0A0A0);
   static const Color errorRed = Color(0xFFFF4C4C);
   static const Color transparent = Colors.transparent;
+  static const Color orangeAccent = Colors.orangeAccent;
 }

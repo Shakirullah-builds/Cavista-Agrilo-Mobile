@@ -29,16 +29,16 @@ class AiService {
   }
 
   // RUN THE SCAN
-  static Future<String> analyzeImage(String imagePath) async {
+  static Future<Map<String, dynamic>?> analyzeImage(String imagePath) async {
     if (_interpreter == null || _labels == null) {
-      return 'Error: Brain not loaded.';
+      debugPrint('Error: Brain not loaded.');
+      return null; // Return null on error
     }
-
     try {
       // Read the image from the camera
       File file = File(imagePath);
       img.Image? rawImage = img.decodeImage(file.readAsBytesSync());
-      if (rawImage == null) return 'Error reading image.';
+      if (rawImage == null) return null;
 
       // Resize the image to 224x224 (The size Teachable Machine expects)
       img.Image resizedImage = img.copyResize(
@@ -85,16 +85,21 @@ class AiService {
         }
       }
 
+
       // Clean up the label name
       String resultLabel = _labels![highestIndex].replaceAll(
         RegExp(r'^[0-9]+\s'),
         '',
       );
 
-      return "$resultLabel (${(highestScore * 100).toStringAsFixed(1)}%)";
+      return {
+        'label': resultLabel,
+        'confidence': highestScore * 100, // Keep it as a clean double
+      };
+
     } catch (e) {
       debugPrint('Inference error: $e');
-      return 'Analysis Failed';
+      return null;
     }
   }
 }

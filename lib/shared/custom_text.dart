@@ -44,13 +44,13 @@ class CustomText extends StatelessWidget {
       decoration: decoration,
       letterSpacing: letterSpacing,
       wordSpacing: wordSpacing,
-      
+    //
     );
     return Text(
       text,
       style: finalStyle,
       textAlign: textAlign ?? TextAlign.start,
-      maxLines: maxLines ?? 1.spMin.toInt(),
+      maxLines: maxLines ?? 1,
       overflow: overflow ?? TextOverflow.ellipsis,
       softWrap: softWrap ?? true,
     );
