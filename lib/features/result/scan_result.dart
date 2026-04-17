@@ -36,6 +36,7 @@ class ScanResult extends ConsumerWidget {
     }
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: CustomText(
           'Scan Results',
           style: Theme.of(
@@ -146,6 +147,7 @@ class ScanResult extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: CustomText(
             'Scan Results',
             style: Theme.of(

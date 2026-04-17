@@ -10,12 +10,85 @@ import 'package:impulse_mobile/features/home/homepage_provider.dart';
 import 'package:impulse_mobile/shared/custom/app_assets.dart';
 import 'package:impulse_mobile/shared/custom/bottom_navbar.dart';
 import 'package:impulse_mobile/shared/custom_text.dart';
+import 'package:impulse_mobile/shared/dialogs/name_prompt_bottomsheet.dart';
+import 'package:impulse_mobile/shared/inputs/text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  String userName = 'Guest';
+  String greeting = 'Welcome!';
+
+  @override
+  void initState() {
+    super.initState();
+    _setGreeting();
+    _checkAndPromptName();
+  }
+
+  // Dynamic Greeting
+  void _setGreeting() {
+    final hour = DateTime.now().hour;
+    setState(() {
+      greeting = hour < 12
+          ? 'Good Morning'
+          : hour < 17
+          ? 'Good Afternoon'
+          : 'Good Evening';
+    });
+  }
+
+  Future<void> _checkAndPromptName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedName = prefs.getString('user_name');
+
+    if (storedName == null || storedName.isEmpty) {
+      // It is their first time! Generate a secret cloud ID
+      final String newDeviceID = const Uuid().v4();
+      await prefs.setString('device_id', newDeviceID);
+
+      // Wait for the UI to finish rendering, then pop the bottom sheet
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showNamePrompt(prefs);
+      });
+    } else {
+      // We remember them! Update the UI.
+      setState(() {
+        userName = storedName;
+      });
+    }
+  }
+
+ void _showNamePrompt(SharedPreferences prefs) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    isDismissible: false,
+    enableDrag: false,
+    backgroundColor: AppColors.background,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(35.r)),
+    ),
+    builder: (context) => NamePromptBottomSheet(
+      prefs: prefs,
+      onNameSaved: (newName) {
+        setState(() {
+          userName = newName;
+        });
+      },
+    ),
+  );
+}
+
+  @override
+  Widget build(BuildContext context) {
     final bottomNavBarCurrentIndex = ref.watch(
       bottomNavBarIndexProvider,
     ); // Watch the bottom nav bar index
@@ -435,20 +508,20 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                'Hello, Devid!',
+                'Hello, $userName!',
                 style: AppTextStyles.bodyMediumStyle.copyWith(
                   color: AppColors.textGrey,
-                  fontSize: 20.spMin,
+                  fontSize: 18.spMin,
                   fontWeight: AppTextStyles.fontWeightRegular,
                 ),
               ),
               CustomText(
-                'Good Morning!',
+                greeting,
                 style: AppTextStyles.headlineStyle.copyWith(
                   color: AppColors.textWhite,
                   fontWeight: AppTextStyles.fontWeightBold,
                   overflow: TextOverflow.visible,
-                  fontSize: 30.spMin,
+                  fontSize: 25.spMin,
                 ),
               ),
             ],
@@ -546,7 +619,7 @@ class HomePage extends ConsumerWidget {
 
   Widget circledCardWidget({Color? color, BoxBorder? border, Widget? child}) {
     return Container(
-      padding: EdgeInsets.all(30.r),
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
         color: color ?? AppColors.textGrey.withValues(alpha: 0.1),
         shape: BoxShape.circle,
