@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,11 +9,12 @@ import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/constants/typography.dart';
 import 'package:impulse_mobile/core/services/ai_service.dart';
-import 'package:impulse_mobile/features/home/homepage_provider.dart';
 import 'package:impulse_mobile/main.dart';
 import 'package:impulse_mobile/shared/custom/analyzing_wave.dart';
 import 'package:impulse_mobile/shared/custom/bottom_navbar.dart';
 import 'package:impulse_mobile/shared/custom_text.dart';
+
+import '../../core/home_page_provider.dart';
 
 // This provider holds the AI analysis result (map with label and confidence) after the scan.
 // It starts as null because nothing is yet to be scanned by default.
@@ -117,10 +119,14 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        automaticallyImplyLeading: false,
         title: CustomText(
           'Plant Scanner',
-          style: Theme.of(context).appBarTheme.titleTextStyle,
-        ),
+ style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontSize: 22.spMin),
+      ),
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -132,10 +138,10 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
               child: CameraPreview(_controller),
             )
           else
-            const Center(
+            Center(
               child: CupertinoActivityIndicator(
                 color: AppColors.lightGreen,
-                radius: 15,
+                radius: 15.r,
               ),
             ),
 
@@ -200,7 +206,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
                 : AppColors.textWhite,
           ),
           child: _isAnalyzing
-              ? const AnalyzingWave(color: AppColors.neonYellow, size: 40)
+              ? const AnalyzingWave(color: AppColors.primaryColor, size: 40)
               : Container(),
         ),
       ),

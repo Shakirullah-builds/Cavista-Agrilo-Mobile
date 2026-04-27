@@ -1,18 +1,20 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/core/constants/asset_path.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/constants/typography.dart';
 import 'package:impulse_mobile/core/services/supabase_service.dart';
-import 'package:impulse_mobile/features/home/homepage_provider.dart';
 import 'package:impulse_mobile/shared/custom/app_assets.dart';
 import 'package:impulse_mobile/shared/custom/bottom_navbar.dart';
 import 'package:impulse_mobile/shared/custom_text.dart';
+import 'package:impulse_mobile/shared/empty_state.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+
+import '../../core/home_page_provider.dart';
 
 class ScanResult extends ConsumerWidget {
   final supabaseService = SupabaseService();
@@ -29,13 +31,44 @@ class ScanResult extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bottomNavBarCurrentIndex = ref.watch(bottomNavBarIndexProvider);
-    //final aiResult = ref.watch(scanResultProvider);
 
     if (aiLabel == "No Scan Data" || aiLabel.isEmpty) {
-      return _buildEmptyScanResult(context, ref, bottomNavBarCurrentIndex);
+      return Scaffold(
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          automaticallyImplyLeading: false,
+          title: CustomText(
+            'Scan Results',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontSize: 22.spMin),
+          ),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 40.w, right: 40.w),
+            child: EmptyStateScreen(
+              subtitle:
+                  "Navigate to the scanner and snap a picture of a leaf to receive a real-time AI health analysis.",
+              emptyStateButtonText: 'Open Scanner',
+            ),
+          ),
+        ),
+        bottomNavigationBar: CustomBottomNavBar(
+          currentIndex: bottomNavBarCurrentIndex,
+          onTap: (index) {
+            if (index == 0) {
+              ref.read(dashboardRefreshProvider.notifier).state++;
+            }
+            ref.read(bottomNavBarIndexProvider.notifier).state = index;
+            ref.read(navigateToProvider)(context);
+          },
+        ),
+      );
     }
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         automaticallyImplyLeading: false,
         title: CustomText(
           'Scan Results',
@@ -46,13 +79,13 @@ class ScanResult extends ConsumerWidget {
       ),
       body: SafeArea(
         child: FutureBuilder<Map<String, dynamic>>(
-          future: supabaseService.fetchDiseaseDetails(aiLabel),
+          future: supabaseService.fetchDiseaseDetails(aiLabel, imagePath),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CupertinoActivityIndicator(
-                  color: AppColors.textWhite,
-                  radius: 20.r,
+                  color: AppColors.primaryColor,
+                  radius: 15.r,
                 ),
               );
             }
@@ -68,20 +101,18 @@ class ScanResult extends ConsumerWidget {
               );
             }
             // Data state
-              
+
             final Map<String, dynamic> data = snapshot.data!;
             final String diseaseName = data["disease_name"] ?? "Unknown";
-            final String description =
-                data["description"] ?? "No description";
+            final String description = data["description"] ?? "No description";
             final int severityLevel = data["severity_level"] ?? 0;
-              
+
             // parse the JSONB array from Supabase into a Dart List of Strings
-            final List<dynamic> rawActions =
-                data["recommended_actions"] ?? [];
+            final List<dynamic> rawActions = data["recommended_actions"] ?? [];
             final List<String> recommendedActions = rawActions
                 .map((e) => e.toString())
                 .toList();
-              
+
             return SingleChildScrollView(
               child: Stack(
                 children: [
@@ -132,106 +163,12 @@ class ScanResult extends ConsumerWidget {
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: bottomNavBarCurrentIndex,
         onTap: (index) {
+          if (index == 0) {
+            ref.read(dashboardRefreshProvider.notifier).state++;
+          }
           ref.read(bottomNavBarIndexProvider.notifier).state = index;
           ref.read(navigateToProvider)(context);
         },
-      ),
-    );
-  }
-
-  Widget _buildEmptyScanResult(
-    BuildContext context,
-    WidgetRef ref,
-    int bottomNavBarCurrentIndex,
-  ) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: CustomText(
-            'Scan Results',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontSize: 22.spMin),
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(left: 50.w, right: 50.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                AssetPath.emptyStateScannerImg,
-                  width: 100.w,
-                  height: 100.h,
-                  color: AppColors.textGrey,
-                  //fit: BoxFit.cover,
-              ),
-              25.verticalSpace,
-              CustomText(
-                "No Scan Data".toUpperCase(),
-                style: AppTextStyles.headlineSmallStyle.copyWith(
-                  color: AppColors.textGrey,
-                  fontWeight: AppTextStyles.fontWeightBold,
-                  fontSize: 26.spMin,
-                ),
-              ),
-              10.verticalSpace,
-              CustomText(
-                textAlign: TextAlign.center,
-                maxLines: 3,
-                overflow: TextOverflow.visible,
-                "Navigate to the scanner and snap a picture of a leaf to receive a real-time AI health analysis.",
-                style: AppTextStyles.bodyStyle.copyWith(
-                  color: AppColors.textGrey,
-                  fontWeight: AppTextStyles.fontWeightRegular,
-                ),
-              ),
-              25.verticalSpace,
-              GestureDetector(
-                onTap: () {
-                  ref.read(bottomNavBarIndexProvider.notifier).state = 1;
-                  context.go('/scanner');
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20.r),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(35.r),
-                    color: AppColors.neonYellow,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.camera_alt_outlined,
-                        size: 18,
-                        color: AppColors.background,
-                      ),
-                      10.horizontalSpace,
-                      CustomText(
-                        "Open Scanner".toUpperCase(),
-                        style: AppTextStyles.bodyStyle.copyWith(
-                          color: AppColors.background,
-                          fontWeight: AppTextStyles.fontWeightBold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: CustomBottomNavBar(
-          currentIndex: bottomNavBarCurrentIndex,
-          onTap: (index) {
-            ref.read(bottomNavBarIndexProvider.notifier).state = index;
-            ref.read(navigateToProvider)(context);
-          },
-        ),
       ),
     );
   }
@@ -256,7 +193,7 @@ class ScanResult extends ConsumerWidget {
               ),
               AppAssets(
                 assetPath: AssetPath.recActionIcon,
-                color: AppColors.neonYellow,
+                color: AppColors.primaryColor,
               ),
             ],
           ),
@@ -317,24 +254,24 @@ class ScanResult extends ConsumerWidget {
   Widget _buildStatChart({required String label, required double value}) {
     return _buildResultCard(
       horizontalPadding: 8.w,
-      verticalPadding: 8.h,
+      verticalPadding: 15.h,
       borderRadius: BorderRadius.circular(40.r),
       color: AppColors.textGrey.withValues(alpha: 0.08),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           CircularPercentIndicator(
-            radius: 55.0,
+            radius: 50.0,
             lineWidth: 8.0,
             percent: value / 100,
             animation: true,
             animationDuration: 1200,
             circularStrokeCap: CircularStrokeCap.round,
             backgroundColor: AppColors.textGrey.withValues(alpha: 0.15),
-            progressColor: AppColors.neonYellow,
+            progressColor: AppColors.lightGreen,
             center: CustomText(
-              letterSpacing: 2,
               '${value.toInt()}%',
+              letterSpacing: 2,
               style: AppTextStyles.titleStyle.copyWith(
                 color: AppColors.textWhite,
                 fontWeight: AppTextStyles.fontWeightBold,
@@ -347,7 +284,7 @@ class ScanResult extends ConsumerWidget {
             label.toUpperCase(),
             style: AppTextStyles.bodyStyle.copyWith(
               color: AppColors.textGrey,
-              fontSize: 14.5.spMin,
+              fontSize: 14.spMin,
               fontWeight: AppTextStyles.fontWeightBold,
             ),
           ),
@@ -369,7 +306,7 @@ class ScanResult extends ConsumerWidget {
   }) {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: verticalPadding ?? 30.h,
+        vertical: verticalPadding ?? 10.h,
         horizontal: horizontalPadding ?? 0.w,
       ),
       decoration: BoxDecoration(
@@ -387,23 +324,22 @@ class ScanResult extends ConsumerWidget {
                   severityLevel: severityLevel ?? 0,
                   diseaseName: diseaseName ?? "",
                 ),
-                15.verticalSpace,
+                10.verticalSpace,
                 CustomText(
                   diseaseName ?? "No Result",
-                  style: AppTextStyles.headlineStyle.copyWith(
+                  style: AppTextStyles.headlineSmallStyle.copyWith(
                     color: AppColors.textWhite,
                     fontWeight: AppTextStyles.fontWeightBold,
                   ),
                 ),
-                15.verticalSpace,
+                10.verticalSpace,
                 CustomText(
                   description ??
                       "Description not available because of no result",
-                  //letterSpacing: 1.0,
                   maxLines: 5,
                   style: AppTextStyles.bodyStyle.copyWith(
                     color: AppColors.textGrey,
-                    fontSize: 16.spMin,
+                    fontSize: 15.spMin,
                     overflow: TextOverflow.visible,
                     fontWeight: AppTextStyles.fontWeightMedium,
                   ),
@@ -447,7 +383,7 @@ class ScanResult extends ConsumerWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 7.w),
+          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
           decoration: BoxDecoration(
             color: statusColor.withValues(alpha: 0.5),
             shape: BoxShape.circle,
@@ -459,6 +395,7 @@ class ScanResult extends ConsumerWidget {
           letterSpacing: 3,
           style: AppTextStyles.bodyStyle.copyWith(
             color: AppColors.textGrey,
+            fontSize: 12.spMin,
             fontWeight: AppTextStyles.fontWeightBold,
           ),
         ),

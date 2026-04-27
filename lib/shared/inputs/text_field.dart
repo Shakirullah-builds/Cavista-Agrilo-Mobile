@@ -12,14 +12,14 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.r),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: AppColors.primaryColor),
         );
     return TextField(
-      cursorColor: AppColors.neonYellow.withValues(alpha: 0.5),
+      cursorColor: AppColors.primaryColor.withValues(alpha: 0.5),
       controller: controller,
       style: AppTextStyles.bodyStyle.copyWith(color: AppColors.textGrey),
       decoration: InputDecoration(
-        hintText: 'e.g., John',
+        hintText: 'e.g., Farmer John',
         hintStyle: AppTextStyles.bodyStyle.copyWith(
           color: AppColors.textGrey.withValues(alpha: 0.5),
         ),

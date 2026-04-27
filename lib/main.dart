@@ -1,6 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,11 +13,15 @@ import 'package:impulse_mobile/core/theme/app_theme.dart';
 // Global variable to hold the cameras
 late List<CameraDescription> cameras;
 
+// Route observer to track navigation events
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
+
 Future<void> main() async {
   // 1. Ensure bindings are initialized before calling native code
   WidgetsFlutterBinding.ensureInitialized();
 
-    // Load the hidden keys
+  // Load the hidden keys
   await dotenv.load(fileName: ".env");
 
   // Initialize the database
@@ -66,18 +68,7 @@ class ImpulseCavista extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Impulse Cavista (Agrilo)',
-      //locale: DevicePreview.locale(context),
-      //builder: DevicePreview.appBuilder,
-      // Theme Setup
       theme: AppTheme.darkTheme,
-      // theme: ThemeData(
-      //   useMaterial3: true,
-      //   // Set the default font for the WHOLE app here
-      //   textTheme: GoogleFonts.poppinsTextTheme(), // To be changed to preferred font
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)
-      // ),
-
-      // Navigation (GoRouter)
       routerConfig: router,
     );
   }

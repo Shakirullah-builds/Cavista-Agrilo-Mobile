@@ -6,7 +6,7 @@ import 'package:impulse_mobile/core/constants/typography.dart';
 
 class AppTheme {
   static final darkTheme = ThemeData(
-    primaryColor: AppColors.neonYellow,
+    primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.background,
     useMaterial3: true,
     textTheme: GoogleFonts.plusJakartaSansTextTheme(

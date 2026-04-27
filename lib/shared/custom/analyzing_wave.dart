@@ -8,7 +8,7 @@ class AnalyzingWave extends StatefulWidget {
   
   const AnalyzingWave({
     super.key,
-    this.color = AppColors.neonYellow,
+    this.color = AppColors.primaryColor,
     this.size = 60,
   });
 
