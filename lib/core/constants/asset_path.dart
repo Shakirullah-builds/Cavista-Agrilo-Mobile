@@ -18,6 +18,8 @@ class AssetPath {
   static const String heartPulseIcon = 'assets/icons/heart-pulse.svg';
   static const String dashboardIcon = 'assets/icons/layout-dashboard.svg';
   static const String leafIcon = 'assets/icons/leaf.svg';
+  static const String cameraOffIcon = 'assets/icons/camera-off.svg';
+
 
   // ========== Images ==========
   static const String powderyMildewImg = 'assets/images/powdery mildew.jpg';

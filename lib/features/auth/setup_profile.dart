@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/core/models/model.dart';
+import 'package:impulse_mobile/shared/buttons/button.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // 🚨 Added
 import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/constants/typography.dart';
@@ -216,7 +217,21 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
 
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
-                child: GestureDetector(
+                child: CustomButton(
+                  width: double.infinity,
+                  verticalPadding: EdgeInsets.symmetric(vertical: 18.h),
+                  buttonColor: _isLoading
+                      ? AppColors.primaryColor.withValues(alpha: 0.5)
+                      : AppColors.primaryColor, // Using Tech Leaf green,
+                  buttonText: 'Proceed to Dashboard',
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryColor.withValues(alpha: 0.2),
+                      blurRadius: 30.r,
+                      spreadRadius: 5.r,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                   onTap: _isLoading
                       ? null
                       : () async {
@@ -256,80 +271,164 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                             });
                           }
                         },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 18.h),
-                    decoration: BoxDecoration(
-                      color: _isLoading
-                          ? AppColors.primaryColor.withValues(alpha: 0.5)
-                          : AppColors
-                                .primaryColor, // Using your Tech Leaf green
-                      borderRadius: BorderRadius.circular(35.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primaryColor.withValues(alpha: 0.2),
-                          blurRadius: 30.r,
-                          spreadRadius: 5.r,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: _isLoading
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CupertinoActivityIndicator(
-                                color: Theme.of(
-                                  context,
-                                ).textTheme.bodyLarge?.color,
-                                radius: 11.r,
-                              ),
-                              10.horizontalSpace,
-                              CustomText(
-                                'Processing...',
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      fontSize: 14.spMin,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                // style: AppTextStyles.captionStyle.copyWith(
-                                //   color: AppColors.background,
-                                //   fontWeight: FontWeight.w700,
-                                //   fontSize: 14.spMin,
-                                // ),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                'Enter Dashboard',
-                                style: Theme.of(context).textTheme.titleLarge
-                                    ?.copyWith(
-                                      fontSize: 16.spMin,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                // style: AppTextStyles.titleStyle.copyWith(
-                                //   color: AppColors.background,
-                                //   fontWeight: FontWeight.w800,
-                                //   fontSize: 16.spMin,
-                                // ),
-                              ),
-                              8.horizontalSpace,
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 22.spMin,
+                  child: _isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CupertinoActivityIndicator(
+                              color: AppColors.background,
+                              radius: 11.r,
+                            ),
+                            10.horizontalSpace,
+                            CustomText(
+                              'Processing...',
+                               style: AppTextStyles.captionStyle.copyWith(
                                 color: AppColors.background,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.spMin,
                               ),
-                            ],
-                          ),
-                  ),
+                              // style: AppTextStyles.captionStyle.copyWith(
+                              //   color: AppColors.background,
+                              //   fontWeight: FontWeight.w700,
+                              //   fontSize: 14.spMin,
+                              // ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              'Proceed to Dashboard',
+                              style: AppTextStyles.titleStyle.copyWith(
+                                color: AppColors.background,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 16.spMin,
+                              ),
+                            ),
+                            8.horizontalSpace,
+                            Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 22.spMin,
+                              color: AppColors.background,
+                            ),
+                          ],
+                        ),
                 ),
               ),
               10.verticalSpace, // Small cushion for bottom swipe bar on iOS
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
+              //   child: GestureDetector(
+              // onTap: _isLoading
+              //     ? null
+              //     : () async {
+              //         if (controller.text.trim().isNotEmpty) {
+              //           setState(() {
+              //             _isLoading = true;
+              //             _errorMessage = null;
+              //           });
+              //         }
+              //         if (controller.text.trim().isNotEmpty) {
+              //           final newName = controller.text.trim();
+
+              //           final prefs = await SharedPreferences.getInstance();
+
+              //           await Future.delayed(Duration(milliseconds: 600));
+              //           await prefs.setString('userName', newName);
+
+              //           // Generate an ID here so Supabase knows who is scanning!
+              //           final deviceId = prefs.getString('device_id');
+              //           if (deviceId == null) {
+              //             final uniqueId =
+              //                 'device_${DateTime.now().millisecondsSinceEpoch}';
+              //             await prefs.setString('device_id', uniqueId);
+              //             debugPrint("Unique Device ID: $uniqueId");
+              //           }
+
+              //           // Lock onboarding so it doesn't show again
+              //           await prefs.setBool('hasCompletedOnboarding', true);
+
+              //           if (context.mounted) {
+              //             context.go('/home');
+              //           }
+              //         } else {
+              //           setState(() {
+              //             _errorMessage =
+              //                 "Please let us know what to call you!";
+              //           });
+              //         }
+              //       },
+              //     child: Container(
+              //       width: double.infinity,
+              //       padding: EdgeInsets.symmetric(vertical: 18.h),
+              //       decoration: BoxDecoration(
+              // color: _isLoading
+              //     ? AppColors.primaryColor.withValues(alpha: 0.5)
+              //     : AppColors
+              //           .primaryColor, // Using your Tech Leaf green
+              //         borderRadius: BorderRadius.circular(35.r),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: AppColors.primaryColor.withValues(alpha: 0.2),
+              //     blurRadius: 30.r,
+              //     spreadRadius: 5.r,
+              //     offset: const Offset(0, 5),
+              //   ),
+              // ],
+              //       ),
+              //       alignment: Alignment.center,
+              //       child: _isLoading
+              //           ? Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               crossAxisAlignment: CrossAxisAlignment.center,
+              //               children: [
+              //                 CupertinoActivityIndicator(
+              //                   color: Theme.of(
+              //                     context,
+              //                   ).textTheme.bodyLarge?.color,
+              //                   radius: 11.r,
+              //                 ),
+              //                 10.horizontalSpace,
+              //                 CustomText(
+              //                   'Processing...',
+              //                   style: Theme.of(context).textTheme.bodySmall
+              //                       ?.copyWith(
+              //                         fontSize: 14.spMin,
+              //                         fontWeight: FontWeight.w700,
+              //                       ),
+              //                   // style: AppTextStyles.captionStyle.copyWith(
+              //                   //   color: AppColors.background,
+              //                   //   fontWeight: FontWeight.w700,
+              //                   //   fontSize: 14.spMin,
+              //                   // ),
+              //                 ),
+              //               ],
+              //             )
+              //           : Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 CustomText(
+              //                   'Proceed to Dashboard',
+              //                   style: AppTextStyles.titleStyle.copyWith(
+              //                     color: AppColors.background,
+              //                     fontWeight: FontWeight.w800,
+              //                     fontSize: 16.spMin,
+              //                   ),
+
+              //                 ),
+              //                 8.horizontalSpace,
+              //                 Icon(
+              //                   Icons.arrow_forward_rounded,
+              //                   size: 22.spMin,
+              //                   color: AppColors.background,
+              //                 ),
+              //               ],
+              //             ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

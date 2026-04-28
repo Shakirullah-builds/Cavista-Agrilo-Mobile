@@ -13,12 +13,20 @@ class CustomButton extends ConsumerWidget {
   final String? buttonText;
   final IconData? icon;
   final Color? buttonColor;
+  final double? width;
+  final EdgeInsetsGeometry? verticalPadding;
+  final List<BoxShadow>? boxShadow;
+  final Widget? child;
   const CustomButton({
     super.key,
     this.onTap,
     this.buttonText,
     this.icon,
     this.buttonColor,
+    this.width,
+    this.verticalPadding,
+    this.boxShadow,
+    this.child,
   });
 
   @override
@@ -31,14 +39,15 @@ class CustomButton extends ConsumerWidget {
             context.push('/scanner');
           },
       child: Container(
-        width: 0.5.sw,
+        width: width ?? 0.5.sw,
         alignment: Alignment.center,
-        padding: EdgeInsets.all(15.r),
+        padding: verticalPadding ?? EdgeInsets.all(15.r),
         decoration: BoxDecoration(
+          boxShadow: boxShadow,
           borderRadius: BorderRadius.circular(35.r),
           color: buttonColor ?? AppColors.primaryColor,
         ),
-        child: Row(
+        child: child ?? Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

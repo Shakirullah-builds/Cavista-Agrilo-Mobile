@@ -12,11 +12,18 @@ class EmptyStateScreen extends ConsumerWidget {
   //final String title;
   final String subtitle;
   final String? emptyStateButtonText;
+  final String? assetPath;
+  final String? title;
+  final IconData? icon;
+  final VoidCallback? onTap;
   const EmptyStateScreen({
     super.key,
-   // required this.title,
+    this.title,
     required this.subtitle,
     this.emptyStateButtonText,
+    this.assetPath,
+    this.icon,
+    this.onTap,
   });
 
   @override
@@ -26,16 +33,18 @@ class EmptyStateScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AppAssets(
-          assetPath: AssetPath.scanIcon,
-          color: Theme.of(context).textTheme.bodyLarge?.color ?? AppColors.textGrey,
+          assetPath: assetPath ?? AssetPath.scanIcon,
+          color:
+              Theme.of(context).textTheme.bodyLarge?.color ??
+              AppColors.textGrey,
           width: 70.w,
           height: 70.h,
         ),
         25.verticalSpace,
-    
+
         CustomText(
-          'No Scans Yet!',
-           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+          title ?? 'No Scans Yet!',
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: AppTextStyles.fontWeightBold,
             fontSize: 24.spMin,
           ),
@@ -51,7 +60,7 @@ class EmptyStateScreen extends ConsumerWidget {
           overflow: TextOverflow.visible,
           subtitle,
           textAlign: TextAlign.center,
-           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: AppColors.textGrey,
             fontSize: 16.spMin,
             height: 1.5,
@@ -63,9 +72,12 @@ class EmptyStateScreen extends ConsumerWidget {
           // ),
         ),
         35.verticalSpace,
-    
         // 3. The Call to Action
-        CustomButton(buttonText: emptyStateButtonText?.toUpperCase()),
+        CustomButton(
+          buttonText: emptyStateButtonText?.toUpperCase(),
+          icon: icon,
+          onTap: onTap,
+        ),
       ],
     );
   }

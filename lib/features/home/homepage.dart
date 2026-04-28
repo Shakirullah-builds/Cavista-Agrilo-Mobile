@@ -308,27 +308,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: CustomText(
-                              'Dashboard up to date!',
-                              style: Theme.of(context).textTheme.bodyLarge
-                                  ?.copyWith(
-                                    fontWeight: AppTextStyles.fontWeightBold,
-                                  ),
-                              // style: AppTextStyles.bodyStyle.copyWith(
-                              //   color: AppColors.background,
-                              //   fontWeight: FontWeight.bold,
-                              // ),
-                            ),
-                            backgroundColor: AppColors.orangeAccent,
-                            duration: const Duration(seconds: 2),
-                            showCloseIcon: true,
-                            closeIconColor: AppColors.background,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.r),
-                            ),
-                          ),
+                          _buildSnackBar(
+                                icon: Icons.update_rounded,
+                                label: 'Dashboard updated!',
+                              )
+                              as SnackBar,
                         );
                       }
                     },
@@ -514,23 +498,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                         5.horizontalSpace,
                         CustomText(
                           _healthStatusText.toUpperCase(),
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                fontSize: 10.spMin,
-                                fontWeight: AppTextStyles.fontWeightBold,
-                                color: averageHealth <= 50
-                                    ? Theme.of(
-                                        context,
-                                      ).textTheme.bodySmall?.color
-                                    : AppColors.primaryColor,
-                              ),
-                          // style: AppTextStyles.captionStyle.copyWith(
-                          //   color: averageHealth <= 50
-                          //       ? AppColors.textWhite
-                          //       : AppColors.primaryColor,
-                          //   fontSize: 10.spMin,
-                          //   fontWeight: AppTextStyles.fontWeightBold,
-                          // ),
+                          style: AppTextStyles.captionStyle.copyWith(
+                            color: averageHealth <= 50
+                                ? AppColors.textWhite
+                                : AppColors.primaryColor,
+                            fontSize: 10.spMin,
+                            fontWeight: AppTextStyles.fontWeightBold,
+                          ),
                         ),
                       ],
                     ),
@@ -753,8 +727,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         alignment: Alignment.center,
         child: Container(
           alignment: Alignment.center,
-          width: 0.8.sw,
-          padding: EdgeInsets.symmetric(vertical: 9.h, horizontal: 8.w),
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 12.h),
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(15.r),
@@ -768,9 +742,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               CustomText(
                 'View Full History',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: AppTextStyles.fontWeightBold,
+                style: AppTextStyles.bodyStyle.copyWith(
                   color: AppColors.primaryColor,
+                  fontWeight: AppTextStyles.fontWeightBold,
                 ),
                 // style: AppTextStyles.bodyStyle.copyWith(
                 //   color: AppColors.primaryColor,
@@ -849,26 +823,29 @@ class _HomePageState extends ConsumerState<HomePage> {
             // ),
           ),
           4.verticalSpace,
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: metric.value,
-                  style: AppTextStyles.headlineStyle.copyWith(
-                    color: AppColors.background,
-                    fontWeight: AppTextStyles.fontWeightBold,
-                    fontSize: 25.spMin,
-                  ),
-                ),
-                if (metric.unit != null)
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: RichText(
+              text: TextSpan(
+                children: [
                   TextSpan(
-                    text: metric.unit,
-                    style: AppTextStyles.bodyMediumStyle.copyWith(
+                    text: metric.value,
+                    style: AppTextStyles.headlineStyle.copyWith(
                       color: AppColors.background,
-                      fontSize: 12.spMin,
+                      fontWeight: AppTextStyles.fontWeightBold,
+                      fontSize: 25.spMin,
                     ),
                   ),
-              ],
+                  if (metric.unit != null)
+                    TextSpan(
+                      text: metric.unit,
+                      style: AppTextStyles.bodyMediumStyle.copyWith(
+                        color: AppColors.background,
+                        fontSize: 12.spMin,
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
@@ -1019,33 +996,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     return GestureDetector(
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: AppColors.orangeAccent,
-            showCloseIcon: true,
-            closeIconColor: AppColors.background,
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.r),
-            ),
-            content: Row(
-              children: [
-                Icon(
-                  Icons.watch_later,
-                  color: AppColors.background,
-                  size: 17.spMin,
-                ),
-                10.horizontalSpace,
-                CustomText(
-                  'This feature is coming soon!',
-                  style: AppTextStyles.bodyStyle.copyWith(
-                    color: AppColors.background,
-                    fontWeight: AppTextStyles.fontWeightBold,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _buildSnackBar(
+                icon: Icons.watch_later,
+                label: 'This feature is coming soon!',
+              )
+              as SnackBar,
         );
       },
       child: circledCardWidget(
@@ -1061,6 +1016,36 @@ class _HomePageState extends ConsumerState<HomePage> {
             color: Theme.of(context).iconTheme.color ?? AppColors.background,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSnackBar({required IconData icon, required String label}) {
+    return SnackBar(
+      backgroundColor: AppColors.orangeAccent,
+      showCloseIcon: true,
+      closeIconColor: AppColors.background,
+      duration: const Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
+      content: Row(
+        children: [
+          Icon(
+            icon,
+            //Icons.watch_later,
+            color: AppColors.background,
+            size: 17.spMin,
+          ),
+          10.horizontalSpace,
+          CustomText(
+            label,
+            //'This feature is coming soon!',
+            style: AppTextStyles.bodyStyle.copyWith(
+              color: AppColors.background,
+              fontWeight: AppTextStyles.fontWeightBold,
+            ),
+          ),
+        ],
       ),
     );
   }
