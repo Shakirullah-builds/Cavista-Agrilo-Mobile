@@ -1,13 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:impulse_mobile/core/constants/colors.dart';
-import 'package:impulse_mobile/core/constants/typography.dart';
 import 'package:impulse_mobile/core/services/ai_service.dart';
 import 'package:impulse_mobile/main.dart';
 import 'package:impulse_mobile/shared/custom/analyzing_wave.dart';
