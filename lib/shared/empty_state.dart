@@ -27,7 +27,7 @@ class EmptyStateScreen extends ConsumerWidget {
       children: [
         AppAssets(
           assetPath: AssetPath.scanIcon,
-          color: AppColors.textWhite,
+          color: Theme.of(context).textTheme.bodyLarge?.color ?? AppColors.textGrey,
           width: 70.w,
           height: 70.h,
         ),
@@ -35,11 +35,15 @@ class EmptyStateScreen extends ConsumerWidget {
     
         CustomText(
           'No Scans Yet!',
-          style: AppTextStyles.headlineStyle.copyWith(
-            color: AppColors.textWhite,
+           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: AppTextStyles.fontWeightBold,
             fontSize: 24.spMin,
           ),
+          // style: AppTextStyles.headlineStyle.copyWith(
+          //   color: AppColors.textWhite,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          //   fontSize: 24.spMin,
+          // ),
         ),
         10.verticalSpace,
         CustomText(
@@ -47,11 +51,16 @@ class EmptyStateScreen extends ConsumerWidget {
           overflow: TextOverflow.visible,
           subtitle,
           textAlign: TextAlign.center,
-          style: AppTextStyles.bodyStyle.copyWith(
+           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: AppColors.textGrey,
             fontSize: 16.spMin,
             height: 1.5,
           ),
+          // style: AppTextStyles.bodyStyle.copyWith(
+          //   color: AppColors.textGrey,
+          //   fontSize: 16.spMin,
+          //   height: 1.5,
+          // ),
         ),
         35.verticalSpace,
     

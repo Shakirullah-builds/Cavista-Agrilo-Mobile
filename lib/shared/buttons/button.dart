@@ -13,7 +13,13 @@ class CustomButton extends ConsumerWidget {
   final String? buttonText;
   final IconData? icon;
   final Color? buttonColor;
-  const CustomButton({super.key, this.onTap, this.buttonText, this.icon, this.buttonColor});
+  const CustomButton({
+    super.key,
+    this.onTap,
+    this.buttonText,
+    this.icon,
+    this.buttonColor,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,6 +54,10 @@ class CustomButton extends ConsumerWidget {
                 color: AppColors.background,
                 fontWeight: AppTextStyles.fontWeightBold,
               ),
+              // style: AppTextStyles.bodyStyle.copyWith(
+              //   color: AppColors.background,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              // ),
             ),
           ],
         ),

@@ -119,7 +119,6 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
         automaticallyImplyLeading: false,
         title: CustomText(
           'Plant Scanner',
@@ -140,7 +139,7 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
           else
             Center(
               child: CupertinoActivityIndicator(
-                color: AppColors.lightGreen,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 radius: 15.r,
               ),
             ),
@@ -182,7 +181,8 @@ class _PlantScannerScreenState extends ConsumerState<PlantScannerScreen> {
       ),
       child: CustomText(
         'Position the plant in the frame',
-        style: AppTextStyles.bodyStyle.copyWith(color: AppColors.textWhite),
+         style: Theme.of(context).textTheme.bodyLarge,
+        // style: AppTextStyles.bodyStyle.copyWith(color: AppColors.textWhite),
         textAlign: TextAlign.center,
       ),
     );

@@ -36,31 +36,34 @@ class CustomBottomNavBar extends StatelessWidget {
         children: [
           _buildNavItem(
             index: 0,
+            context: context,
             label: 'Dashboard',
             iconWidget: AppAssets(
               assetPath: AssetPath.dashboardIcon,
-              color: currentIndex == 0 ? AppColors.background : AppColors.textGrey
+              color: currentIndex == 0 ? AppColors.background : Theme.of(context).textTheme.bodyLarge?.color ?? AppColors.textGrey,
             ),
             isSelected: currentIndex == 0,
           ),
           _buildNavItem(
             index: 1,
+            context: context,
             label: 'Scan',
             isLarge: true,
             iconWidget: AppAssets(
               width: 32.w,
               height: 32.h,
               assetPath: AssetPath.scanIcon,
-              color: currentIndex == 1 ? AppColors.background : AppColors.textGrey
+              color: currentIndex == 1 ? AppColors.background : Theme.of(context).textTheme.bodyLarge?.color ?? AppColors.textGrey,
             ),
             isSelected: currentIndex == 1,
           ),
           _buildNavItem(
             index: 2,
             label: 'Results',
+            context: context,
             iconWidget: AppAssets(
               assetPath: AssetPath.scanResultIcon,
-              color: currentIndex == 2 ? AppColors.background : AppColors.textGrey
+              color: currentIndex == 2 ? AppColors.background : Theme.of(context).textTheme.bodyLarge?.color ?? AppColors.textGrey,
             ),
             isSelected: currentIndex == 2,
           ),
@@ -77,6 +80,7 @@ class CustomBottomNavBar extends StatelessWidget {
     double horizontalPadding = 25,
     double verticalPadding = 18,
     bool isLarge = false,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: () => onTap(index),
@@ -86,7 +90,7 @@ class CustomBottomNavBar extends StatelessWidget {
           vertical: isLarge ? 18.h : verticalPadding.h,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryColor : AppColors.textGrey.withValues(alpha: 0.05),
+          color: isSelected ? AppColors.primaryColor : AppColors.textGrey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(30.r),
         ),
         child: Column(
@@ -103,9 +107,9 @@ class CustomBottomNavBar extends StatelessWidget {
               style: AppTextStyles.bodyStyle.copyWith(
                  fontSize: 12.spMin,
                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                color: isSelected ? AppColors.background : AppColors.textGrey,
+                color: isSelected ? AppColors.background : Theme.of(context).textTheme.bodyLarge?.color,
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:impulse_mobile/core/router.dart';
-import 'package:impulse_mobile/core/constants/colors.dart';
 import 'package:impulse_mobile/core/services/ai_service.dart';
 import 'package:impulse_mobile/core/services/supabase_service.dart';
 import 'package:impulse_mobile/core/theme/app_theme.dart';
@@ -13,10 +12,9 @@ import 'package:impulse_mobile/core/theme/app_theme.dart';
 // Global variable to hold the cameras
 late List<CameraDescription> cameras;
 
-// Route observer to track navigation events
-final RouteObserver<ModalRoute<void>> routeObserver =
-    RouteObserver<ModalRoute<void>>();
-
+// // Route observer to track navigation events
+// final RouteObserver<ModalRoute<void>> routeObserver =
+//     RouteObserver<ModalRoute<void>>();
 Future<void> main() async {
   // 1. Ensure bindings are initialized before calling native code
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,13 +38,13 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // 3. Make the Status Bar transparent (Looks modern)
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: AppColors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ),
-  );
+  // // 3. Make the Status Bar transparent (Looks modern)
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: AppColors.transparent,
+  //     statusBarIconBrightness: Brightness.dark,
+  //   ),
+  // );
 
   runApp(
     ScreenUtilInit(
@@ -68,7 +66,9 @@ class ImpulseCavista extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Impulse Cavista (Agrilo)',
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme, 
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       routerConfig: router,
     );
   }

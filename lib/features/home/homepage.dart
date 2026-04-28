@@ -264,56 +264,62 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.listen(dashboardRefreshProvider, (previous, next) {
       _loadDashboardData();
     });
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: AppColors.transparent,
-      ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(left: 15.w, top: 15.h, right: 15.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(),
-                10.verticalSpace,
-                // 2. The Conditional Layout
-                if (isLoadingData)
-                  Expanded(
-                    child: Center(
-                      child: CupertinoActivityIndicator(
-                        color: AppColors.primaryColor,
-                        radius: 15.r,
-                      ),
-                    ),
-                  )
-                else if (!hasScans)
-                  // EMPTY STATE: Fills the remaining screen and centers perfectly!
-                  Expanded(
-                    child: EmptyStateScreen(
-                      //title: 'No Scans Yet',
-                      subtitle:
-                          "Your crop health overview will appear here once you make your first scan.",
-                      emptyStateButtonText: 'Start first scan',
-                    ),
-                  )
-                else
-                  Expanded(
-                    child: RefreshIndicator(
-                      backgroundColor: AppColors.background,
-                      color: AppColors.lightGreen,
-                      onRefresh: () async {
-                        await _loadDashboardData();
 
-                        if (context.mounted) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: AppColors.transparent,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(left: 15.w, top: 15.h, right: 15.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              10.verticalSpace,
+              // 2. The Conditional Layout
+              if (isLoadingData)
+                Expanded(
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      radius: 15.r,
+                    ),
+                  ),
+                )
+              else if (!hasScans)
+                // EMPTY STATE: Fills the remaining screen and centers perfectly!
+                Expanded(
+                  child: EmptyStateScreen(
+                    //title: 'No Scans Yet',
+                    subtitle:
+                        "Your crop health overview will appear here once you make your first scan.",
+                    emptyStateButtonText: 'Start first scan',
+                  ),
+                )
+              else
+                Expanded(
+                  child: RefreshIndicator(
+                    backgroundColor: AppColors.background,
+                    color: AppColors.lightGreen,
+                    onRefresh: () async {
+                      await _loadDashboardData();
+
+                      if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: CustomText(
                               'Dashboard up to date!',
-                              style: AppTextStyles.bodyStyle.copyWith(
-                                color: AppColors.background,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    fontWeight: AppTextStyles.fontWeightBold,
+                                  ),
+                              // style: AppTextStyles.bodyStyle.copyWith(
+                              //   color: AppColors.background,
+                              //   fontWeight: FontWeight.bold,
+                              // ),
                             ),
                             backgroundColor: AppColors.orangeAccent,
                             duration: const Duration(seconds: 2),
@@ -326,35 +332,34 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         );
                       }
-                      },
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildQuickStats(ref),
-                            10.verticalSpace,
-                            _buildSwipeableCard(ref),
-                            10.verticalSpace,
-                            _buildPlantStats(),
-                            20.verticalSpace, // Extra padding for the bottom nav bar
-                          ],
-                        ),
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildQuickStats(ref),
+                          10.verticalSpace,
+                          _buildSwipeableCard(ref),
+                          10.verticalSpace,
+                          _buildPlantStats(),
+                          20.verticalSpace, // Extra padding for the bottom nav bar
+                        ],
                       ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavBar(
-          currentIndex: bottomNavBarCurrentIndex,
-          onTap: (index) {
-            ref.read(bottomNavBarIndexProvider.notifier).state = index;
-            ref.read(navigateToProvider)(context);
-            debugPrint('Bottom Nav Index: $index');
-          },
-        ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: bottomNavBarCurrentIndex,
+        onTap: (index) {
+          ref.read(bottomNavBarIndexProvider.notifier).state = index;
+          ref.read(navigateToProvider)(context);
+          debugPrint('Bottom Nav Index: $index');
+        },
       ),
     );
   }
@@ -454,6 +459,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                       fontSize: 13.spMin,
                       fontWeight: AppTextStyles.fontWeightBold,
                     ),
+                    // style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    //   fontSize: 13.spMin,
+                    //   fontWeight: AppTextStyles.fontWeightBold,
+                    // ),
+                    // style: AppTextStyles.titleMediumStyle.copyWith(
+                    //   color: AppColors.background,
+                    //   fontSize: 13.spMin,
+                    //   fontWeight: AppTextStyles.fontWeightBold,
+                    // ),
                   ),
                   CustomText(
                     '$averageHealth%',
@@ -462,6 +476,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                       fontSize: 60.spMin,
                       fontWeight: AppTextStyles.fontWeightBold,
                     ),
+                    // style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    //   fontSize: 60.spMin,
+                    //   fontWeight: AppTextStyles.fontWeightBold,
+                    // ),
+                    // style: AppTextStyles.titleMediumStyle.copyWith(
+                    //   color: AppColors.background,
+                    //   fontSize: 60.spMin,
+                    //   fontWeight: AppTextStyles.fontWeightBold,
+                    // ),
                   ),
                   10.verticalSpace,
                   Container(
@@ -492,13 +515,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                         5.horizontalSpace,
                         CustomText(
                           _healthStatusText.toUpperCase(),
-                          style: AppTextStyles.captionStyle.copyWith(
-                            color: averageHealth <= 50
-                                ? AppColors.textWhite
-                                : AppColors.primaryColor,
-                            fontSize: 10.spMin,
-                            fontWeight: AppTextStyles.fontWeightBold,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                fontSize: 10.spMin,
+                                fontWeight: AppTextStyles.fontWeightBold,
+                                color: averageHealth <= 50
+                                    ? Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.color
+                                    : AppColors.primaryColor,
+                              ),
+                          // style: AppTextStyles.captionStyle.copyWith(
+                          //   color: averageHealth <= 50
+                          //       ? AppColors.textWhite
+                          //       : AppColors.primaryColor,
+                          //   fontSize: 10.spMin,
+                          //   fontWeight: AppTextStyles.fontWeightBold,
+                          // ),
                         ),
                       ],
                     ),
@@ -507,7 +540,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             20.verticalSpace,
-            const Divider(color: AppColors.textGrey, thickness: 0.3),
+            Divider(color: AppColors.textGrey, thickness: 0.3),
             15.verticalSpace,
             _buildReportRowWithDividers([
               _buildhealthInfo(
@@ -560,6 +593,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             //fontSize: 16.spMin,
             fontWeight: AppTextStyles.fontWeightBold,
           ),
+          // style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          //   //fontSize: 12.spMin,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          //   color: Theme.of(
+          //     context,
+          //   ).textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+          // ),
+          // style: AppTextStyles.captionStyle.copyWith(
+          //   color: AppColors.background.withValues(alpha: 0.5),
+          //   //fontSize: 16.spMin,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          // ),
         ),
         5.verticalSpace,
         CustomText(
@@ -569,6 +614,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             //fontSize: 25.spMin,
             fontWeight: AppTextStyles.fontWeightBold,
           ),
+          // style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          //   //fontSize: 25.spMin,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          // ),
+          // style: AppTextStyles.titleSmallStyle.copyWith(
+          //   color: AppColors.background,
+          //   //fontSize: 25.spMin,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          // ),
         ),
       ],
     );
@@ -592,6 +646,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                 fontWeight: AppTextStyles.fontWeightBold,
                 //fontSize: 15.spMin,
               ),
+              // style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              //   //fontSize: 15.spMin,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              //   color: Theme.of(
+              //     context,
+              //   ).textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+              // ),
+              // style: AppTextStyles.captionStyle.copyWith(
+              //   color: AppColors.background.withValues(alpha: 0.5),
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              //   //fontSize: 15.spMin,
+              // ),
             ),
             3.verticalSpace,
             CustomText(
@@ -601,6 +667,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                 fontWeight: AppTextStyles.fontWeightBold,
                 fontSize: 20.spMin,
               ),
+              // style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              //   fontSize: 20.spMin,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              // ),
+              // style: AppTextStyles.titleMediumStyle.copyWith(
+              //   color: AppColors.background,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              //   fontSize: 20.spMin,
+              // ),
             ),
           ],
         ),
@@ -619,8 +694,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           margin: EdgeInsets.symmetric(horizontal: 3.w),
-          width: currentPage == index ? 24.w : 8.w,
-          height: 2.5.w,
+          width: currentPage == index ? 30.w : 12.w,
+          height: 3.5.w,
           decoration: BoxDecoration(
             color: currentPage == index
                 ? AppColors.primaryColor
@@ -694,10 +769,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               CustomText(
                 'View Full History',
-                style: AppTextStyles.bodyStyle.copyWith(
-                  color: AppColors.primaryColor,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: AppTextStyles.fontWeightBold,
+                  color: AppColors.primaryColor,
                 ),
+                // style: AppTextStyles.bodyStyle.copyWith(
+                //   color: AppColors.primaryColor,
+                //   fontWeight: AppTextStyles.fontWeightBold,
+                // ),
               ),
               10.horizontalSpace,
               Icon(
@@ -760,6 +839,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               fontWeight: AppTextStyles.fontWeightMedium,
               fontSize: 14.spMin,
             ),
+            // style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            //   fontSize: 14.spMin,
+            //   fontWeight: AppTextStyles.fontWeightMedium,
+            // ),
+            // style: AppTextStyles.titleMediumStyle.copyWith(
+            //   color: AppColors.background,
+            //   fontWeight: AppTextStyles.fontWeightMedium,
+            //   fontSize: 14.spMin,
+            // ),
           ),
           4.verticalSpace,
           RichText(
@@ -858,13 +946,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: cardWidget(
         padding: EdgeInsets.symmetric(vertical: 20.h),
         color: isSelected
-            ? AppColors.textWhite
-            : AppColors.textGrey.withValues(alpha: 0.1),
+            // 👇 If selected: Use the theme's TEXT color (White in Dark mode, Black in Light mode)
+            ? Theme.of(context).textTheme.bodyLarge?.color
+            // 👇 If unselected: Use the standard Card color
+            : Theme.of(context).cardColor,
+
         child: CustomText(
           title,
-          style: AppTextStyles.titleMediumStyle.copyWith(
-            color: isSelected ? AppColors.background : AppColors.textGrey,
-            fontWeight: AppTextStyles.fontWeightMedium,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            // 👇 If selected: Use the theme's BACKGROUND color for text (Black in Dark mode, White in Light mode)
+            color: isSelected
+                ? Theme.of(context).scaffoldBackgroundColor
+                : AppColors.textGrey,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
@@ -878,27 +972,43 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                'Hello, $userName',
-                style: AppTextStyles.bodyMediumStyle.copyWith(
-                  color: AppColors.textGrey,
-                  fontSize: 17.spMin,
-                  fontWeight: AppTextStyles.fontWeightRegular,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  'Hello, $userName',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 17.spMin,
+                    fontWeight: AppTextStyles.fontWeightRegular,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                  ),
+                  // style: AppTextStyles.bodyMediumStyle.copyWith(
+                  //   color: AppColors.textGrey,
+                  //   fontSize: 17.spMin,
+                  //   fontWeight: AppTextStyles.fontWeightRegular,
+                  // ),
                 ),
-              ),
-              CustomText(
-                greeting,
-                style: AppTextStyles.headlineStyle.copyWith(
-                  color: AppColors.textWhite,
-                  fontWeight: AppTextStyles.fontWeightBold,
+                CustomText(
                   overflow: TextOverflow.visible,
-                  fontSize: 23.spMin,
+                  greeting,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontSize: 23.spMin,
+                    fontWeight: AppTextStyles.fontWeightBold,
+                  ),
+                  // style: AppTextStyles.headlineStyle.copyWith(
+                  //   color: AppColors.textWhite,
+                  //   fontWeight: AppTextStyles.fontWeightBold,
+                  //   overflow: TextOverflow.visible,
+                  //   fontSize: 23.spMin,
+                  // ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           _buildNotificationIcon(),
         ],
@@ -920,8 +1030,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               borderRadius: BorderRadius.circular(15.r),
             ),
             content: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   Icons.watch_later,
@@ -951,7 +1059,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             width: 20.w,
             height: 20.h,
             assetPath: AssetPath.bellIcon,
-            color: AppColors.textWhite,
+            color: Theme.of(context).iconTheme.color ?? AppColors.background,
           ),
         ),
       ),
@@ -979,24 +1087,31 @@ class _HomePageState extends ConsumerState<HomePage> {
           Align(
             alignment: Alignment.centerRight,
             child: circledCardWidget(
-              border: Border.all(color: AppColors.transparent),
+              border: Border.all(color: Theme.of(context).cardColor),
               child: icon,
             ),
           ),
           CustomText(
             value,
-            style: AppTextStyles.headlineStyle.copyWith(
-              color: AppColors.textWhite,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               fontWeight: AppTextStyles.fontWeightMedium,
             ),
+            // style: AppTextStyles.headlineStyle.copyWith(
+            //   color: AppColors.textWhite,
+            //   fontWeight: AppTextStyles.fontWeightMedium,
+            // ),
           ),
           CustomText(
             maxLines: 2,
             label,
-            style: AppTextStyles.bodyStyle.copyWith(
-              color: AppColors.textGrey,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: AppTextStyles.fontWeightRegular,
+              color: AppColors.textGrey,
             ),
+            // style: AppTextStyles.bodyStyle.copyWith(
+            //   color: AppColors.textGrey,
+            //   fontWeight: AppTextStyles.fontWeightRegular,
+            // ),
           ),
         ],
       ),
@@ -1023,6 +1138,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               color: AppColors.background,
               fontWeight: AppTextStyles.fontWeightBold,
             ),
+            // style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            //   fontWeight: AppTextStyles.fontWeightBold,
+            // ),
+            // style: AppTextStyles.captionStyle.copyWith(
+            //   color: AppColors.background,
+            //   fontWeight: AppTextStyles.fontWeightBold,
+            // ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -1046,7 +1168,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         border:
             border ??
             Border.all(
-              color: AppColors.textWhite.withValues(alpha: 0.25),
+              color: Theme.of(context).cardColor,
+              //color: AppColors.textWhite.withValues(alpha: 0.25),
               width: 0.2.w,
             ),
       ),
@@ -1072,10 +1195,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           child ??
           CustomText(
             'Health Overview',
-            style: AppTextStyles.titleMediumStyle.copyWith(
-              color: AppColors.textGrey,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: AppTextStyles.fontWeightMedium,
+              color: AppColors.textGrey,
             ),
+            // style: AppTextStyles.titleMediumStyle.copyWith(
+            //   color: AppColors.textGrey,
+            //   fontWeight: AppTextStyles.fontWeightMedium,
+            // ),
           ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -23,19 +24,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     OnboardingContent(
       title: 'Spot Pathogens Instantly',
       subtitle: 'AI-powered disease detection right in your pocket.',
-      placeholderIcon: Icons.document_scanner_rounded,
+      placeholderIcon: Icons.image_search_rounded,
     ),
     OnboardingContent(
       title: 'Track Crop Vitality With Ease',
       subtitle:
           'Build a complete history of your scans to prevent future outbreaks.',
-      placeholderIcon: Icons.auto_graph_rounded,
+      placeholderIcon: Icons.insights_rounded,
     ),
     OnboardingContent(
       title: 'Take Actions With Confidence',
       subtitle:
           'Get targeted treatment recommendations to protect your harvest.',
-      placeholderIcon: Icons.shield_rounded,
+      placeholderIcon: Icons.verified_rounded,
     ),
   ];
 
@@ -64,7 +65,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: AppColors.transparent,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
@@ -76,10 +81,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 children: [
                   CustomText(
                     'AGRILO',
-                    style: AppTextStyles.bodyStyle.copyWith(
-                      color: AppColors.primaryColor,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: AppTextStyles.fontWeightBold,
+                      color: AppColors.primaryColor,
                     ),
+                    // style: AppTextStyles.bodyStyle.copyWith(
+                    //   color: AppColors.primaryColor,
+                    //   fontWeight: AppTextStyles.fontWeightBold,
+                    // ),
                   ),
                   TextButton(
                     onPressed: _goToPersonalization,
@@ -91,11 +100,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     ),
                     child: CustomText(
                       'Skip',
-                      style: AppTextStyles.bodyStyle.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: AppTextStyles.fontWeightBold,
                         color: AppColors.primaryColor,
                         fontSize: 16.spMin,
-                        fontWeight: AppTextStyles.fontWeightBold,
                       ),
+                      // style: AppTextStyles.bodyStyle.copyWith(
+                      //   color: AppColors.primaryColor,
+                      //   fontSize: 16.spMin,
+                      //   fontWeight: AppTextStyles.fontWeightBold,
+                      // ),
                     ),
                   ),
                 ],
@@ -124,10 +138,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             height: 350.h,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: AppColors.cardDark,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(30.r),
                               border: Border.all(
-                                color: AppColors.textGrey.withValues(alpha: 0.1),
+                                color: AppColors.textGrey.withValues(
+                                  alpha: 0.1,
+                                ),
                               ),
                             ),
                             child: Center(
@@ -147,7 +163,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                 ),
                                 child: Icon(
                                   _contents[index].placeholderIcon,
-                                  size: 80.spMin,
+                                  size: 150.spMin,
                                   color: AppColors.primaryColor,
                                 ),
                               ),
@@ -161,12 +177,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           overflow: TextOverflow.visible,
                           maxLines: 3,
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.headlineMediumStyle.copyWith(
-                            color: AppColors.textWhite,
-                            fontSize: 32.spMin,
-                            height: 1.2,
-                            fontWeight: FontWeight.w800,
-                          ),
+                          style: Theme.of(context).textTheme.headlineLarge
+                              ?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 32.spMin,
+                                height: 1.2,
+                              ),
+                          // style: AppTextStyles.headlineMediumStyle.copyWith(
+                          //   color: AppColors.textWhite,
+                          //   fontSize: 32.spMin,
+                          //   height: 1.2,
+                          //   fontWeight: FontWeight.w800,
+                          // ),
                         ),
 
                         20.verticalSpace,
@@ -179,12 +201,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             maxLines: 3,
                             _contents[index].subtitle,
                             textAlign: TextAlign.center,
-                            style: AppTextStyles.bodyStyle.copyWith(
-                              color: AppColors.textWhite,
-                              fontSize: 16.spMin,
-                              height: 1.5,
-                              fontWeight: AppTextStyles.fontWeightRegular,
-                            ),
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  fontWeight: AppTextStyles.fontWeightRegular,
+                                  fontSize: 16.spMin,
+                                  height: 1.5,
+                                ),
+                            // style: AppTextStyles.bodyStyle.copyWith(
+                            //   color: AppColors.textWhite,
+                            //   fontSize: 16.spMin,
+                            //   height: 1.5,
+                            //   fontWeight: AppTextStyles.fontWeightRegular,
+                            // ),
                           ),
                         ),
                       ],

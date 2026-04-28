@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +62,11 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          toolbarHeight: 0,
+          backgroundColor: AppColors.transparent,
+          elevation: 0,
+        ),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,24 +85,36 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                         //20.verticalSpace,
                         CustomText(
                           'Welcome to Agrilo',
-                          style: AppTextStyles.bodyMediumStyle.copyWith(
-                            fontSize: 32.spMin,
-                            color: AppColors.textWhite,
-                            fontWeight: FontWeight.w900,
-                            height: 1.2,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 32.spMin,
+                                height: 1.2,
+                              ),
+                          // style: AppTextStyles.bodyMediumStyle.copyWith(
+                          //   fontSize: 32.spMin,
+                          //   color: AppColors.textWhite,
+                          //   fontWeight: FontWeight.w900,
+                          //   height: 1.2,
+                          // ),
                         ),
                         20.verticalSpace,
                         CustomText(
                           overflow: TextOverflow.visible,
                           maxLines: 3,
                           'Let’s personalize your intelligence dashboard. What should we call you?',
-                          style: AppTextStyles.bodyMediumStyle.copyWith(
-                            fontSize: 16.spMin,
-                            color: AppColors.textGrey,
-                            fontWeight: AppTextStyles.fontWeightMedium,
-                            height: 1.5,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 16.spMin,
+                                fontWeight: AppTextStyles.fontWeightMedium,
+                                height: 1.5,
+                              ),
+                          // style: AppTextStyles.bodyMediumStyle.copyWith(
+                          //   fontSize: 16.spMin,
+                          //   color: AppColors.textGrey,
+                          //   fontWeight: AppTextStyles.fontWeightMedium,
+                          //   height: 1.5,
+                          // ),
                         ),
                         40.verticalSpace,
                         CustomTextField(controller: controller),
@@ -113,12 +130,19 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                                   ),
                                   child: CustomText(
                                     _errorMessage!,
-                                    style: AppTextStyles.bodyMediumStyle.copyWith(
-                                      color: AppColors
-                                          .errorRed, // Using your Amber warning color!
-                                      fontSize: 12.spMin,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontSize: 12.spMin,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.errorRed,
+                                        ),
+                                    // style: AppTextStyles.bodyMediumStyle.copyWith(
+
+                                    //   fontSize: 12.spMin,
+                                    //   fontWeight: FontWeight.w500,
+                                    // ),
                                   ),
                                 ),
                         ),
@@ -156,14 +180,28 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                                   Expanded(
                                     child: CustomText(
                                       _reasons[index].reason,
-                                      style: AppTextStyles.bodyStyle.copyWith(
-                                        color: AppColors.textWhite.withValues(
-                                          alpha: 0.9,
-                                        ),
-                                        fontSize: 16.spMin,
-                                        fontWeight:
-                                            AppTextStyles.fontWeightMedium,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontSize: 16.spMin,
+                                            fontWeight:
+                                                AppTextStyles.fontWeightMedium,
+                                            height: 1.5,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.color
+                                                ?.withValues(alpha: 0.9),
+                                          ),
+                                      // style: AppTextStyles.bodyStyle.copyWith(
+                                      //   color: AppColors.textWhite.withValues(
+                                      //     alpha: 0.9,
+                                      //   ),
+                                      //   fontSize: 16.spMin,
+                                      // fontWeight:
+                                      //     AppTextStyles.fontWeightMedium,
+                                      // ),
                                     ),
                                   ),
                                 ],
@@ -244,17 +282,24 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CupertinoActivityIndicator(
-                                color: AppColors.background,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyLarge?.color,
                                 radius: 11.r,
                               ),
                               10.horizontalSpace,
                               CustomText(
                                 'Processing...',
-                                style: AppTextStyles.captionStyle.copyWith(
-                                  color: AppColors.background,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.spMin,
-                                ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      fontSize: 14.spMin,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                // style: AppTextStyles.captionStyle.copyWith(
+                                //   color: AppColors.background,
+                                //   fontWeight: FontWeight.w700,
+                                //   fontSize: 14.spMin,
+                                // ),
                               ),
                             ],
                           )
@@ -263,11 +308,16 @@ class _SetupProfileScreenState extends ConsumerState<SetupProfileScreen> {
                             children: [
                               CustomText(
                                 'Enter Dashboard',
-                                style: AppTextStyles.titleStyle.copyWith(
-                                  color: AppColors.background,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 16.spMin,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(
+                                      fontSize: 16.spMin,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                // style: AppTextStyles.titleStyle.copyWith(
+                                //   color: AppColors.background,
+                                //   fontWeight: FontWeight.w800,
+                                //   fontSize: 16.spMin,
+                                // ),
                               ),
                               8.horizontalSpace,
                               Icon(

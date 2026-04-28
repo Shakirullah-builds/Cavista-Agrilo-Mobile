@@ -35,7 +35,6 @@ class ScanResult extends ConsumerWidget {
     if (aiLabel == "No Scan Data" || aiLabel.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
           automaticallyImplyLeading: false,
           title: CustomText(
             'Scan Results',
@@ -68,7 +67,6 @@ class ScanResult extends ConsumerWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
         automaticallyImplyLeading: false,
         title: CustomText(
           'Scan Results',
@@ -84,7 +82,7 @@ class ScanResult extends ConsumerWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                 child: CupertinoActivityIndicator(
-                  color: AppColors.primaryColor,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   radius: 15.r,
                 ),
               );
@@ -93,10 +91,13 @@ class ScanResult extends ConsumerWidget {
               return Center(
                 child: CustomText(
                   'Ooops Error!: ${snapshot.error}',
-                  style: AppTextStyles.titleStyle.copyWith(
-                    color: AppColors.textWhite,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: AppTextStyles.fontWeightMedium,
                   ),
+                  // style: AppTextStyles.titleStyle.copyWith(
+                  //   color: AppColors.textWhite,
+                  //   fontWeight: AppTextStyles.fontWeightMedium,
+                  // ),
                 ),
               );
             }
@@ -129,6 +130,7 @@ class ScanResult extends ConsumerWidget {
                           description: description,
                           severityLevel: severityLevel,
                           imagePath: imagePath,
+                          context: context,
                         ),
                         30.verticalSpace,
                         Row(
@@ -138,6 +140,7 @@ class ScanResult extends ConsumerWidget {
                               child: _buildStatChart(
                                 label: 'AI Confidence',
                                 value: confidence,
+                                context: context,
                               ),
                             ),
                             15.horizontalSpace,
@@ -145,12 +148,16 @@ class ScanResult extends ConsumerWidget {
                               child: _buildStatChart(
                                 label: 'Severity Level',
                                 value: severityLevel.toDouble(),
+                                context: context,
                               ),
                             ),
                           ],
                         ),
                         30.verticalSpace,
-                        _buildRecommendedAction(recommendedActions),
+                        _buildRecommendedAction(
+                          recommendedActions,
+                          context: context,
+                        ),
                       ],
                     ),
                   ),
@@ -173,8 +180,12 @@ class ScanResult extends ConsumerWidget {
     );
   }
 
-  Widget _buildRecommendedAction(List<String> actions) {
+  Widget _buildRecommendedAction(
+    List<String> actions, {
+    required BuildContext context,
+  }) {
     return _buildResultCard(
+      context: context,
       horizontalPadding: 20.w,
       verticalPadding: 20.h,
       color: AppColors.textGrey.withValues(alpha: 0.3),
@@ -186,10 +197,13 @@ class ScanResult extends ConsumerWidget {
             children: [
               CustomText(
                 'Recommended Actions',
-                style: AppTextStyles.titleStyle.copyWith(
-                  color: AppColors.textWhite,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: AppTextStyles.fontWeightBold,
                 ),
+                // style: AppTextStyles.titleStyle.copyWith(
+                //   color: AppColors.textWhite,
+                //   fontWeight: AppTextStyles.fontWeightBold,
+                // ),
               ),
               AppAssets(
                 assetPath: AssetPath.recActionIcon,
@@ -201,7 +215,7 @@ class ScanResult extends ConsumerWidget {
           ...actions.map(
             (actionText) => Padding(
               padding: EdgeInsets.only(bottom: 15.h),
-              child: _buildActionItem(text: actionText),
+              child: _buildActionItem(text: actionText, context: context),
             ),
           ),
         ],
@@ -209,7 +223,7 @@ class ScanResult extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionItem({required String text}) {
+  Widget _buildActionItem({required String text, required BuildContext context}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -240,19 +254,29 @@ class ScanResult extends ConsumerWidget {
             overflow: TextOverflow.visible,
             maxLines: 3,
             text,
-            style: AppTextStyles.bodyStyle.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: AppTextStyles.fontWeightMedium,
               color: AppColors.textGrey,
               fontSize: 15.spMin,
-              fontWeight: AppTextStyles.fontWeightMedium,
             ),
+            // style: AppTextStyles.bodyStyle.copyWith(
+            //   color: AppColors.textGrey,
+            //   fontSize: 15.spMin,
+            //   fontWeight: AppTextStyles.fontWeightMedium,
+            // ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildStatChart({required String label, required double value}) {
+  Widget _buildStatChart({
+    required String label,
+    required double value,
+    required BuildContext context,
+  }) {
     return _buildResultCard(
+      context: context,
       horizontalPadding: 8.w,
       verticalPadding: 15.h,
       borderRadius: BorderRadius.circular(40.r),
@@ -272,21 +296,29 @@ class ScanResult extends ConsumerWidget {
             center: CustomText(
               '${value.toInt()}%',
               letterSpacing: 2,
-              style: AppTextStyles.titleStyle.copyWith(
-                color: AppColors.textWhite,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: AppTextStyles.fontWeightBold,
               ),
+              // style: AppTextStyles.titleStyle.copyWith(
+              //   color: AppColors.textWhite,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              // ),
             ),
           ),
           15.verticalSpace,
           CustomText(
             letterSpacing: 2,
             label.toUpperCase(),
-            style: AppTextStyles.bodyStyle.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: AppTextStyles.fontWeightBold,
               color: AppColors.textGrey,
               fontSize: 14.spMin,
-              fontWeight: AppTextStyles.fontWeightBold,
             ),
+            // style: AppTextStyles.bodyStyle.copyWith(
+            //   color: AppColors.textGrey,
+            //   fontSize: 14.spMin,
+            //   fontWeight: AppTextStyles.fontWeightBold,
+            // ),
           ),
         ],
       ),
@@ -303,6 +335,7 @@ class ScanResult extends ConsumerWidget {
     String? description,
     int? severityLevel,
     String? imagePath,
+    required BuildContext context,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(
@@ -323,26 +356,36 @@ class ScanResult extends ConsumerWidget {
                 _buildInfectionResult(
                   severityLevel: severityLevel ?? 0,
                   diseaseName: diseaseName ?? "",
+                  context: context,
                 ),
                 10.verticalSpace,
                 CustomText(
                   diseaseName ?? "No Result",
-                  style: AppTextStyles.headlineSmallStyle.copyWith(
-                    color: AppColors.textWhite,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: AppTextStyles.fontWeightBold,
                   ),
+                  // style: AppTextStyles.headlineSmallStyle.copyWith(
+                  //   color: AppColors.textWhite,
+                  //   fontWeight: AppTextStyles.fontWeightBold,
+                  // ),
                 ),
                 10.verticalSpace,
                 CustomText(
                   description ??
                       "Description not available because of no result",
                   maxLines: 5,
-                  style: AppTextStyles.bodyStyle.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: AppTextStyles.fontWeightMedium,
                     color: AppColors.textGrey,
                     fontSize: 15.spMin,
                     overflow: TextOverflow.visible,
-                    fontWeight: AppTextStyles.fontWeightMedium,
                   ),
+                  // style: AppTextStyles.bodyStyle.copyWith(
+                  //   color: AppColors.textGrey,
+                  //   fontSize: 15.spMin,
+                  //   overflow: TextOverflow.visible,
+                  //   fontWeight: AppTextStyles.fontWeightMedium,
+                  // ),
                 ),
                 20.verticalSpace,
                 Container(
@@ -366,6 +409,7 @@ class ScanResult extends ConsumerWidget {
   Widget _buildInfectionResult({
     required int severityLevel,
     required String diseaseName,
+    required BuildContext context,
   }) {
     Color statusColor;
     String statusText;
@@ -393,11 +437,16 @@ class ScanResult extends ConsumerWidget {
         CustomText(
           statusText.toUpperCase(),
           letterSpacing: 3,
-          style: AppTextStyles.bodyStyle.copyWith(
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: AppTextStyles.fontWeightBold,
             color: AppColors.textGrey,
             fontSize: 12.spMin,
-            fontWeight: AppTextStyles.fontWeightBold,
           ),
+          // style: AppTextStyles.bodyStyle.copyWith(
+          //   color: AppColors.textGrey,
+          //   fontSize: 12.spMin,
+          //   fontWeight: AppTextStyles.fontWeightBold,
+          // ),
         ),
       ],
     );

@@ -46,11 +46,8 @@ class ScanHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background, // Ensure your dark background
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
         elevation: 0,
         title: CustomText(
           'Scan History',
@@ -73,7 +70,7 @@ class ScanHistoryScreen extends StatelessWidget {
           child: Icon(
             Icons.arrow_back_ios_new_outlined,
             size: 15,
-            color: AppColors.textWhite,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
       ),
@@ -84,7 +81,7 @@ class ScanHistoryScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CupertinoActivityIndicator(
-                color: AppColors.primaryColor,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 radius: 15.r,
               ),
             );
@@ -95,9 +92,10 @@ class ScanHistoryScreen extends StatelessWidget {
             return Center(
               child: CustomText(
                 'Failed to load history.',
-                style: AppTextStyles.bodyStyle.copyWith(
-                  color: AppColors.textWhite,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
+                // style: AppTextStyles.bodyStyle.copyWith(
+                //   color: AppColors.textWhite,
+                // ),
               ),
             );
           }
@@ -108,7 +106,6 @@ class ScanHistoryScreen extends StatelessWidget {
           if (scans.isEmpty) {
             return Center(
               child: EmptyStateScreen(
-                //title: 'No scans yet',
                 subtitle: 'Time to check your plants!',
               ),
             );
@@ -129,6 +126,7 @@ class ScanHistoryScreen extends StatelessWidget {
                 diseaseName: diseaseName,
                 severityLevel: severityLevel,
                 dateStr: formattedDate,
+                context: context,
               );
             },
           );
@@ -142,6 +140,7 @@ class ScanHistoryScreen extends StatelessWidget {
     required String diseaseName,
     required int severityLevel,
     required String dateStr,
+    required BuildContext context,
   }) {
     final String lowerName = diseaseName.toLowerCase();
     final bool isInvalid =
@@ -171,7 +170,7 @@ class ScanHistoryScreen extends StatelessWidget {
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: AppColors.textGrey.withValues(
-          alpha: 0.1,
+          alpha: 0.2,
         ), // Subtle dark card background
         borderRadius: BorderRadius.circular(20.r),
       ),
@@ -184,11 +183,7 @@ class ScanHistoryScreen extends StatelessWidget {
               color: statusColor.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              statusIcon,
-              color: statusColor,
-              size: 24.spMin,
-            ),
+            child: Icon(statusIcon, color: statusColor, size: 24.spMin),
           ),
 
           15.horizontalSpace,
@@ -200,19 +195,27 @@ class ScanHistoryScreen extends StatelessWidget {
               children: [
                 CustomText(
                   diseaseName,
-                  style: AppTextStyles.bodyStyle.copyWith(
-                    color: AppColors.textWhite,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: AppTextStyles.fontWeightBold,
                     fontSize: 16.spMin,
                   ),
+
+                  // style: AppTextStyles.bodyStyle.copyWith(
+                  //   color: AppColors.textWhite,
+                  //   fontWeight: AppTextStyles.fontWeightBold,
+                  //   fontSize: 16.spMin,
+                  // ),
                 ),
                 5.verticalSpace,
                 CustomText(
                   dateStr,
-                  style: AppTextStyles.bodyStyle.copyWith(
-                    color: AppColors.textGrey,
-                    fontSize: 13.spMin,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontSize: 13.spMin),
+                  // style: AppTextStyles.bodyStyle.copyWith(
+                  //   color: AppColors.textGrey,
+                  //   fontSize: 13.spMin,
+                  // ),
                 ),
               ],
             ),
@@ -227,11 +230,15 @@ class ScanHistoryScreen extends StatelessWidget {
             ),
             child: CustomText(
               statusText,
-              style: AppTextStyles.bodyStyle.copyWith(
-                color: statusColor,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: AppTextStyles.fontWeightBold,
                 fontSize: 12.spMin,
               ),
+              // style: AppTextStyles.bodyStyle.copyWith(
+              //   color: statusColor,
+              //   fontWeight: AppTextStyles.fontWeightBold,
+              //   fontSize: 12.spMin,
+              // ),
             ),
           ),
         ],

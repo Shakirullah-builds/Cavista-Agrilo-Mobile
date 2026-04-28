@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -44,10 +45,14 @@ class _SplashGuardState extends ConsumerState<SplashGuard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: AppColors.transparent,
+        elevation: 0,
+      ),
       body: Center(
         child: CupertinoActivityIndicator(
-          color: AppColors.primaryColor, // Your Tech Leaf green
+          color: Theme.of(context).textTheme.bodyLarge?.color,
           radius: 15.r,
         ),
       ),
