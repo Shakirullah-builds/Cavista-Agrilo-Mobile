@@ -8,13 +8,9 @@
 > *Spot pathogens instantly. Track crop vitality. Take action with confidence.*
 
 <div align="center">
-  <img src="assets/images/agrilo_demo_darkmode.gif" width="250" alt="Agrilo Demo - Dark Mode">
-</div>
-
----
-
-<div align="center">
-  <img src="assets/images/agrilo_demo_lightmode.gif" width="250" alt="Agrilo Demo - Light Mode">
+  <img src="assets/images/agrilo_demo_darkmode.gif" width="250" alt="Agrilo Dark Mode Demo">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/images/agrilo_demo_lightmode.gif" width="250" alt="Agrilo Light Mode Demo">
 </div>
 
 ## 🌍 The Problem & The Solution
