@@ -1,4 +1,4 @@
-# 🌿 Agrilo: AI-Powered Crop Disease Detection
+# <img src="assets/images/splash_icon.png" width="40" alt="Agrilo Logo"> Agrilo: AI-Powered Crop Disease Detection
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev/) 
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev/)
@@ -7,7 +7,15 @@
 
 > *Spot pathogens instantly. Track crop vitality. Take action with confidence.*
 
-![Agrilo Demo](link-to-your-gif-here.gif) *(Tip: Replace this with a 5-second GIF of the app scanning a plant)*
+<div align="center">
+  <img src="assets/images/agrilo_demo_darkmode.gif" width="250" alt="Agrilo Demo - Dark Mode">
+</div>
+
+---
+
+<div align="center">
+  <img src="assets/images/agrilo_demo_lightmode.gif" width="250" alt="Agrilo Demo - Light Mode">
+</div>
 
 ## 🌍 The Problem & The Solution
 Crop diseases cost the global agricultural industry billions of dollars annually, often devastating farmers who lack immediate access to plant pathologists. 
@@ -24,7 +32,7 @@ Agrilo is engineered for performance, offline-first reliability, and a seamless 
 * **Framework:** Flutter (Dart)
 * **State Management:** Riverpod (ConsumerStatefulWidgets & StateProviders)
 * **Backend & Auth:** Supabase
-* **AI/ML Integration:** [Insert TFLite / Custom AI Service Name]
+* **AI/ML Integration:** TensorFlow Lite (`assets/ml/model_unquant.tflite`)
 * **Routing:** GoRouter
 
 ### Engineering Highlights & Challenges Solved
@@ -56,21 +64,22 @@ To run Agrilo locally, follow these steps:
 * Any AI API Keys if applicable
 
 ### Installation
+
 1. Clone the repository:
    ```bash
    git clone [https://github.com/Shakirullah-builds/Cavista-Agrilo-Mobile.git](https://github.com/Shakirullah-builds/Cavista-Agrilo-Mobile.git)
 
 2. Navigate to the project directory:
    ```bash 
-   cd agrilo
+   cd Cavista-Agrilo-Mobile
 
 3. Install dependencies:
    ```bash
    flutter pub get
 
 4. Set up your environment variables:
-   - Create a .env file in the root directory.
-   - Add your Supabase keys and AI endpoints:
+   * Create a `.env` file in the root directory.
+   * Add your Supabase keys and AI endpoints:
    ```bash
    SUPABASE_URL=your_url_here
    SUPABASE_ANON_KEY=your_key_here
@@ -81,11 +90,8 @@ To run Agrilo locally, follow these steps:
 
 ---
 
-## 👨‍💻 About the Developer
+### 👨‍💻 About the Developer
 
-### I am Shakirullah, a Pure Chemistry undergraduate by day and a Mobile App Developer by night. I am deeply
-### passionate about the intersection of software engineering and real-world utility. When I am not running
-### argentometric titrations in the lab or facilitating mobile dev classes, I am architecting agent-first
-### applications in Flutter.
+I am Shakirullah, a Pure Chemistry undergraduate by day and a Mobile App Developer by night. I am deeply passionate about the intersection of software engineering and real-world utility. When I am not running argentometric titrations in the lab or facilitating mobile dev classes, I am architecting agent-first applications in Flutter.
 
-- [Connect with me on Linkedln](https://www.linkedin.com/in/shakirullah-omotoso-7a8846347?utm_source=share_via&utm_content=profile&utm_medium=member_ios)
+* [Connect with me on Linkedln](https://www.linkedin.com/in/shakirullah-omotoso-7a8846347?utm_source=share_via&utm_content=profile&utm_medium=member_ios)
